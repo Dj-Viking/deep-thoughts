@@ -6,6 +6,7 @@ const Home = () => {
   //use useQuery hook to make query request
   const { loading, data } = useQuery(QUERY_THOUGHTS);
   const thoughts = data?.thoughts || [];//optional chaining supported by new browsers as of oct 19 2020 but not node yet we will see later.
+  console.log('loading: ', loading);
   console.log(thoughts);
   return (
     <main>
