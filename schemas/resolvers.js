@@ -127,6 +127,24 @@ const resolvers = {
       } else {
         throw new AuthenticationError("Must be logged in to do that.");
       }
+    },
+    addFriend: async(parent, args, context) => {
+      if (context.user) {//if user is logged in
+        const updatedUser = await User.findOneAndUpdate
+        (
+          { _id: context.user._id },
+          {
+            $addToSet: {
+              friends: args.friendId,
+              username: args.username
+            }
+          },
+          { new: true }
+        );
+        return updatedUser;
+      } else {
+        throw new AuthenticationError("Must be logged in to do that.");
+      }
     }
   }
 };
