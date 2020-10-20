@@ -83,6 +83,50 @@ const resolvers = {
       }
       const token = signToken(user);
       return { token, user };
+    },
+    addThought: async (parent, args, context) => {
+      if (context.user) {//checking for existence of context.user first before accessing this query
+        const thought = await Thought.create
+        (
+          {
+            ...args,
+            username: context.user.username
+          }
+        );
+        await User.findByIdAndUpdate
+        (
+          { _id: context.user._id },
+          { 
+            $push: {
+              thoughts: thought._id
+            } 
+          },
+          { new: true }
+        );
+        return thought;
+      } else {
+        throw new AuthenticationError("Must be logged in to do that.");
+      }
+    },
+    addReaction: async (parent, args, context) => {
+      if (context.user) {//if user is logged on
+        const updatedThought = await Thought.findOneAndUpdate
+        (
+          { _id: args.thoughtId },
+          {
+            $push: {
+              reactions: {
+                reactionBody: args.reactionBody,
+                username: context.user.username
+              }
+            }
+          },
+          { new: true, runValidators: true }
+        );
+        return updatedThought;
+      } else {
+        throw new AuthenticationError("Must be logged in to do that.");
+      }
     }
   }
 };

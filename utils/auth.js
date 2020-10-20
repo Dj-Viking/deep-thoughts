@@ -41,7 +41,7 @@ module.exports = {
       req.user = data;
     } catch (error) {
       console.log('Invalid Token.');
-      //console.log(error);
+      console.log(error);
     }
 
     //return updated request object
