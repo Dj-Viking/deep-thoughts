@@ -35,10 +35,24 @@ const typeDefs = gql`
   }
 
   type Query {
+    me: User
     users: [User]
     user(username: String!): User
     thoughts(username: String): [Thought]
     thought(_id: ID!): Thought
+  }
+
+  type Mutation {
+    login(email: String!, password: String!): Auth
+    addUser(username: String!, email: String!, password: String!): Auth
+    addThought(thoughtText: String!): Thought
+    addReaction(thoughtId: ID!, reactionBody: String!): Thought
+    addFriend(friendId: ID!): User
+  }
+
+  type Auth {
+    token: ID!
+    user: User
   }
 `;
 //export the typedefs
@@ -49,3 +63,6 @@ module.exports = typeDefs;
 // otherwise apollo will return an error to client
 // making the request and then the query wont even
 // reach the resolver function associated with it
+
+//if there is not exclamation point it can 
+// be optional in the query
