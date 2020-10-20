@@ -20,6 +20,22 @@ const { signToken } = require('../utils/auth.js');
 
 const resolvers = {
   Query: {
+    me: async (parent, args, context) => {
+      if (context.user) {
+        const userData = await User.findOne
+        (
+          {
+            _id: context.user._id
+          }
+        )
+        .select('-__v -password')
+        .populate('thoughts')
+        .populate('friends');
+        return userData;
+      } else {
+        throw new AuthenticationError('Not logged in.');
+      }
+    },
     //get all thoughts from username and sort them 
     // or all of them if a username is not passed into graphQL
     thoughts: async (parent, args) => {
