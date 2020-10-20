@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const QUERY_THOUGHTS = gql`
-  query thoughts($username: String) {
-    thoughts(username: $username) {
+  query thoughts {
+    thoughts {
       _id
       thoughtText
       createdAt
