@@ -45,7 +45,7 @@ const ThoughtList = (props) => {
                     {
                       thought.reactionCount ? 'see' : 'start'
                     } 
-                    the discussion!
+                    {' '}the discussion!
                     
                   </p>
 
