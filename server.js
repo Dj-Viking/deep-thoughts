@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 
 //import apollo server
 const { ApolloServer } = require('apollo-server-express');
@@ -24,11 +25,42 @@ const server = new ApolloServer
   }
 );
 
+//redirect http traffic to https while on heroku since heroku
+// wont do this for us
+if(process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => 
+  {
+    if (req.header('x-forwarded-proto') !== 'https') {
+      res.redirect(`https://${req.header('host')}${req.url}`);
+    } else {
+      next();
+    }
+  });
+}
+
 //integrate Apollo server with Express app as middleware
 server.applyMiddleware({ app });
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+// app.get('*', (req, res) => {
+//   res.status(404)
+//   .sendFile(
+//       path.join(__dirname, './public/404.html')
+//     );
+// })
+
+//serve up static assets from build folder
+// if node environment is in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(
+    express.static(
+      path.join(__dirname, '../client/build')
+    )
+  );
+}
+
 
 db.once('open', () => {
   app.listen(PORT, () => {
