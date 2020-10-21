@@ -1,7 +1,7 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
-import { BrowserRouter as Router, Route, Switch} from 'react-router-dom'; 
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'; 
 import Login from './pages/Login.js';
 import NoMatch from './pages/NoMatch.js';
 import SingleThought from './pages/SingleThought.js';
@@ -33,6 +33,7 @@ function App() {
               <Route exact path='/signup' component={Signup} />
               <Route exact path='/profile' component={Profile} />
               <Route exact path='/thought' component={SingleThought} />
+              <Route component={NoMatch} />
             </div>
           <Footer />
         </div>
