@@ -30,6 +30,13 @@ server.applyMiddleware({ app });
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+// app.get('*', (req, res) => {
+//   res.status(404)
+//   .sendFile(
+//       path.join(__dirname, './public/404.html')
+//     );
+// })
+
 db.once('open', () => {
   app.listen(PORT, () => {
     console.log(`API server running on port ${PORT}!`);
