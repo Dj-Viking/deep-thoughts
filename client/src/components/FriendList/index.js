@@ -7,12 +7,8 @@ const FriendList = (props) => {
     username,
     friends
   } = props;
-  if (!friends || !friends.length) {
-    return (
-      <p className="bg-dark text-light p-3">
-        {username}, lets find some friends to make!
-      </p>
-    );
+  if (!friends.length) {
+    return <p className="bg-dark text-light p-3">{username}, lets find some friends to make!</p>
   }
 
   return (

@@ -136,11 +136,11 @@ const resolvers = {
           {
             $addToSet: {
               friends: args.friendId,
-              username: args.username
             }
           },
           { new: true }
-        );
+        )
+        .populate('friends');
         return updatedUser;
       } else {
         throw new AuthenticationError("Must be logged in to do that.");

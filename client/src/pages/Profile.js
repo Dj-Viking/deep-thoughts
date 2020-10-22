@@ -1,30 +1,69 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import ThoughtList from '../components/ThoughtList.js';
 import FriendList from '../components/FriendList';
-import { useQuery } from '@apollo/react-hooks';
-import { QUERY_USER } from '../utils/queries.js';
+import ThoughtForm from '../components/ThoughtForm/index.js';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import { QUERY_USER, QUERY_ME } from '../utils/queries.js';
+import { ADD_FRIEND } from '../utils/mutations.js';
+import Auth from '../utils/auth.js';
 
 const Profile = () => {
+  const [addFriend] = useMutation(ADD_FRIEND);//destructuring the mutation function out of ADD_FRIEND
   const { username: userParam } = useParams();
   const { loading, data } = useQuery
   (
-    QUERY_USER,
+    userParam ? QUERY_USER : QUERY_ME,
     {
       variables: { username: userParam }
     }
   );
-  const user = data?.user || {};
+  const user = data?.me || data?.user || {};
   if (loading) {
     return <div>Loading...</div>;
+  }
+
+  //redirect to personal profile page if username is
+  // the logged in user's
+  if (Auth.loggedIn() && Auth.getProfile().data.username === userParam) {
+    if (!user?.username) {
+      return (
+        <h4>
+          You need to be logged in to see this page.{'\n'}
+          Use the navigation Links above to sign up or log in.
+        </h4>
+      );
+    }
+    return <Redirect to="/profile" />;
+  }
+
+  const handleClick = async (event) => {
+    // event.preventDefault();
+    // debugger;
+    try { 
+      await addFriend
+      (
+        {
+          variables: { id: user._id }
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
     <div>
       <div className="flex-row mb-3">
         <h2 className="bg-dark text-secondary p-3 display-inline-block">
-          Viewing {user.username}'s profile.
+          Viewing {userParam ? `${user.username}'s ` : 'your'} profile.
         </h2>
+        <button 
+          className="btn ml-auto"
+          onClick={handleClick}
+        >
+          Add Friend
+        </button>
       </div>
 
       <div className="flex-row justify-space-between mb-3">
@@ -42,6 +81,7 @@ const Profile = () => {
           />
         </div>
       </div>
+      <div className="mb-3">{!userParam && <ThoughtForm />}</div>
     </div>
   );
 };
