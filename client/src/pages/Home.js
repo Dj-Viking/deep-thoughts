@@ -4,6 +4,7 @@ import { QUERY_THOUGHTS, QUERY_ME_BASIC } from '../utils/queries.js';
 import Auth from '../utils/auth.js';
 import ThoughtList from '../components/ThoughtList.js';
 import FriendList from '../components/FriendList/index.js';
+import ThoughtForm from '../components/ThoughtForm/index.js';
 
 const Home = () => {
   //use useQuery hook to make query request
@@ -16,6 +17,14 @@ const Home = () => {
   return (
     <main>
       <div className='flex-row justify-space-between'>
+        {
+          loggedIn &&
+          (
+            <div className="col-12 mb-3">
+              <ThoughtForm />
+            </div>
+          )
+        }
         <div className={`col-12 mb-3 ${loggedIn && 'col-lg-8'}`}>
           {
             loading 
@@ -47,6 +56,7 @@ const Home = () => {
           :
           null
         }
+
       </div>
     </main>
   );
