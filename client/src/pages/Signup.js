@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { ADD_USER } from '../utils/mutations.js';
+import Auth from '../utils/auth.js';//importing as a short name...original name is AuthService
 
 const Signup = () => {
   const [formState, setFormState] = useState({ username: '', email: '', password: '' });
@@ -29,6 +30,7 @@ const Signup = () => {
         }
       );
       console.log(data);
+      Auth.login(data.addUser.token);
     } catch (error) {
       console.log(error);
     }
