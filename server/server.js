@@ -44,13 +44,6 @@ server.applyMiddleware({ app });
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// app.get('*', (req, res) => {
-//   res.status(404)
-//   .sendFile(
-//       path.join(__dirname, './public/404.html')
-//     );
-// })
-
 //serve up static assets from build folder
 // if node environment is in production
 if (process.env.NODE_ENV === 'production') {
@@ -60,6 +53,14 @@ if (process.env.NODE_ENV === 'production') {
     )
   );
 }
+
+app.get('*', (req, res) => {
+  res.sendFile(
+    path.join(
+      __dirname, '../client/build/index.html'
+    )
+  )
+});
 
 
 db.once('open', () => {
