@@ -39,6 +39,7 @@ module.exports = {
         }
       );
       req.user = data;
+      //console.log(data);
     } catch (error) {
       console.log('Invalid Token.');
       console.log(error);

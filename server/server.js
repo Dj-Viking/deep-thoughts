@@ -21,7 +21,6 @@ const server = new ApolloServer
     typeDefs,
     resolvers,
     context: authMiddleware// ({ req }) => req.headers
-    
   }
 );
 
